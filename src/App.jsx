@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 
 import "./App.css";
 
@@ -7,13 +7,14 @@ function App() {
   const [length, setLength] = useState(8);
   const [numbers, setNumbers] = useState(false);
   const [symbols, setSymbols] = useState(false);
+  const passRef = useRef();
   const passwordGenerator = () => {
     let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     if (numbers) {
       chars += "1234567890";
     }
     if (symbols) {
-      chars += "!@#$%^&*()_+=-[]{}";
+      chars += "@$&*";
     }
     let pass = "";
     for (let i = 0; i < length; i++) {
@@ -37,6 +38,7 @@ function App() {
         type="text"
         name="pass"
         id="pass"
+        ref={passRef}
         value={password}
         onChange={(e) => {
           e.preventDefault();
@@ -75,6 +77,16 @@ function App() {
           setLength(e.target.value);
         }}
       />
+      <br />
+      <br />
+      <button
+        onClick={() => {
+          passRef.current.select();
+          window.navigator.clipboard.writeText(password);
+        }}
+      >
+        Copy
+      </button>
     </>
   );
 }
